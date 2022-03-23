@@ -9,12 +9,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, useColorScheme} from 'react-native';
 
 import {MainNavigator} from './src/screens';
 

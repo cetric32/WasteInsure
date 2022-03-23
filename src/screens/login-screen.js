@@ -1,6 +1,13 @@
-import {StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
+import {StyleSheet, ScrollView, Dimensions} from 'react-native';
 import React, {useState} from 'react';
-import {Button, TextInput} from 'react-native-paper';
+import {
+  Button,
+  TextInput,
+  Text,
+  Paragraph,
+  Title,
+  Headline,
+} from 'react-native-paper';
 import {TextLink} from '../common/components';
 
 const inputsWidth = Dimensions.get('window').width - 25;
@@ -21,7 +28,11 @@ const LoginScreen = ({navigation}) => {
         flex: 1,
         flexDirection: 'row',
       }}>
-      <Text>LoginScreen</Text>
+      <Title>Welcome to WasteInsure</Title>
+      <Paragraph style={styles.paragraph}>
+        Use Plastic to pay all your health and education insurances, and also
+        your bills.
+      </Paragraph>
       <TextInput
         label="Phone Number"
         value={phone}
@@ -63,5 +74,10 @@ const styles = StyleSheet.create({
   inputs: {
     width: inputsWidth,
     margin: 10,
+  },
+  paragraph: {
+    marginHorizontal: 10,
+    margin: 10,
+    width: inputsWidth,
   },
 });

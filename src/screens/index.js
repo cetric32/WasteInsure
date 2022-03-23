@@ -3,6 +3,7 @@ import LoginScreen from './login-screen';
 import RegisterScreen from './register-screen';
 import React from 'react';
 import HomeScreen from './home-screens';
+import AgentsScreen from './agents-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,11 @@ export function MainNavigator(props) {
         name="Home"
         component={HomeScreen}
         options={{title: 'WasteInsure', headerShown: false}}
+      />
+      <Stack.Screen
+        name="Agents"
+        component={AgentsScreen}
+        options={{title: 'Our Collection Agents'}}
       />
     </Stack.Navigator>
   );

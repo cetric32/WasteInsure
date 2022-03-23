@@ -1,24 +1,11 @@
 import * as React from 'react';
 import {Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-function WelcomeScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
+import WelcomeScreen from './welcome-screen';
+import SettingsScreen from './settings-screen';
+import RedeemScreen from './redeem-screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +20,8 @@ export default function HomeScreen() {
             iconName = focused ? 'home' : 'home';
           } else if (route.name === 'Settings') {
             iconName = focused ? 'cog' : 'cog';
+          } else if (route.name === 'Redeem') {
+            iconName = focused ? 'dollar-sign' : 'gift';
           }
 
           // You can return any component that you like here!
@@ -45,6 +34,11 @@ export default function HomeScreen() {
         name="Welcome"
         component={WelcomeScreen}
         options={{title: 'Home'}}
+      />
+      <Tab.Screen
+        name="Redeem"
+        component={RedeemScreen}
+        options={{title: 'Redeem'}}
       />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
