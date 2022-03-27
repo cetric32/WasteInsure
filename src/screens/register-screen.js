@@ -1,15 +1,36 @@
-import {StyleSheet, Text, ScrollView, Dimensions} from 'react-native';
+import {StyleSheet, ScrollView, Dimensions, View} from 'react-native';
 import React, {useState} from 'react';
-import {Button, TextInput} from 'react-native-paper';
+import {Button, TextInput, Text, Badge, Avatar} from 'react-native-paper';
 import {TextLink} from '../common/components';
+import {connect} from 'react-redux';
+import {registerUser} from '../store/actions';
+import {Picker} from '@react-native-picker/picker';
+import _ from 'lodash';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
-const RegisterScreen = ({navigation}) => {
+const RegisterScreen = props => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [country, setCountry] = useState({});
+  const [phoneCode, setPhoneCode] = useState('');
+
+  const register = () => {
+    props.registerUser(
+      {
+        phone: `${phoneCode || ''}${phone}`,
+        password,
+        name,
+        email,
+        country_id: country.id,
+      },
+      () => {
+        props.navigation.navigate('Login');
+      },
+    );
+  };
 
   return (
     <ScrollView
@@ -32,6 +53,22 @@ const RegisterScreen = ({navigation}) => {
         style={styles.inputs}
         right={<TextInput.Icon name="account" />}
       />
+      <View style={{width: inputsWidth, borderColor: 'grey', borderWidth: 0.9}}>
+        <Picker
+          selectedValue={country || ''}
+          style={styles.inputs}
+          onValueChange={(itemValue, itemIndex) => {
+            console.log('itemValue', itemValue, typeof itemValue);
+            setCountry(itemValue);
+            setPhoneCode(itemValue.phone_code);
+          }}>
+          <Picker.Item label="Select Country" value="" />
+          {_.map(props.countries, c => {
+            return <Picker.Item label={c.name} value={c} key={c.id} />;
+          })}
+        </Picker>
+      </View>
+
       <TextInput
         label="Phone Number"
         value={phone}
@@ -39,14 +76,17 @@ const RegisterScreen = ({navigation}) => {
         mode="outlined"
         style={styles.inputs}
         right={<TextInput.Icon name="phone" />}
+        keyboardType="phone-pad"
+        left={<TextInput.Affix text={phoneCode} />}
       />
       <TextInput
-        label="Email"
+        label="Email (optional)"
         value={email}
         onChangeText={text => setEmail(text)}
         mode="outlined"
         style={styles.inputs}
         right={<TextInput.Icon name="email" />}
+        keyboardType="email-address"
       />
       <TextInput
         label="Password"
@@ -55,27 +95,36 @@ const RegisterScreen = ({navigation}) => {
         mode="outlined"
         style={styles.inputs}
         right={<TextInput.Icon name="lock" />}
+        secureTextEntry={true}
       />
       <Button
         icon="account-plus"
         mode="contained"
+        loading={props.isRegistering}
+        disabled={props.isRegistering}
         style={[{backgroundColor: 'green'}, styles.inputs]}
-        onPress={() => {
-          navigation.navigate('Login');
-        }}>
+        onPress={register}>
         Register
       </Button>
       <TextLink
         label={'Login'}
         onClick={() => {
-          navigation.navigate('Login');
+          props.navigation.navigate('Login');
         }}
       />
     </ScrollView>
   );
 };
 
-export default RegisterScreen;
+const mapStateToProps = ({user}) => {
+  console.log(user);
+  return {
+    countries: user.countries,
+    isRegistering: user.isRegistering,
+  };
+};
+
+export default connect(mapStateToProps, {registerUser})(RegisterScreen);
 
 const styles = StyleSheet.create({
   inputs: {

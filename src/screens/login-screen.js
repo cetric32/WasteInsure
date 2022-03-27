@@ -9,12 +9,36 @@ import {
   Headline,
 } from 'react-native-paper';
 import {TextLink} from '../common/components';
+import {connect} from 'react-redux';
+import {loginUser, getCountries} from './../store/actions';
+import {useEffect} from 'react';
+import {getDataStorage} from '../common/functions';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = props => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(props.getCountries, []);
+
+  useEffect(() => {
+    getDataStorage('lastPhone')
+      .then(data => {
+        if (data) {
+          setPhone(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const login = () => {
+    props.loginUser({phone, password}, () => {
+      props.navigation.navigate('Home');
+    });
+  };
+
+  console.log(props.isSigningIn);
 
   return (
     <ScrollView
@@ -40,6 +64,7 @@ const LoginScreen = ({navigation}) => {
         mode="outlined"
         style={styles.inputs}
         right={<TextInput.Icon name="phone" />}
+        keyboardType="phone-pad"
       />
       <TextInput
         label="Password"
@@ -48,27 +73,35 @@ const LoginScreen = ({navigation}) => {
         mode="outlined"
         style={styles.inputs}
         right={<TextInput.Icon name="lock" />}
+        secureTextEntry={true}
       />
       <Button
         icon="login"
         mode="contained"
+        loading={props.isSigningIn}
+        disabled={props.isSigningIn}
         style={[{backgroundColor: 'green'}, styles.inputs]}
-        onPress={() => {
-          navigation.navigate('Home');
-        }}>
+        onPress={login}>
         Login
       </Button>
       <TextLink
         label={'Creat Account'}
         onClick={() => {
-          navigation.navigate('Register');
+          props.navigation.navigate('Register');
         }}
       />
     </ScrollView>
   );
 };
 
-export default LoginScreen;
+const mapStateToProps = ({user}) => {
+  console.log(user);
+  return {
+    isSigningIn: user.isSigningIn,
+  };
+};
+
+export default connect(mapStateToProps, {loginUser, getCountries})(LoginScreen);
 
 const styles = StyleSheet.create({
   inputs: {

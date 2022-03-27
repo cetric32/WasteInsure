@@ -1,14 +1,20 @@
 import * as React from 'react';
 import {Text, View, Dimensions, Alert, StyleSheet} from 'react-native';
 import {Card, Avatar, Title, Paragraph, Button} from 'react-native-paper';
+import {connect} from 'react-redux';
+import {getRedeemConfigs} from '../../store/actions';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useEffect} from 'react';
+import _ from 'lodash';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
 const LeftContent = props => <Avatar.Icon {...props} icon="recycle" />;
 
-function WelcomeScreen({navigation}) {
+function WelcomeScreen(props) {
+  useEffect(props.getRedeemConfigs, []);
+
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Card style={styles.card} mode="elevated">
@@ -33,14 +39,14 @@ function WelcomeScreen({navigation}) {
           <Button
             icon={'map-marker'}
             onPress={() => {
-              navigation.navigate('Agents');
+              props.navigation.navigate('Agents');
             }}>
             Agents
           </Button>
           <Button
             icon={'gift'}
             onPress={() => {
-              navigation.navigate('Redeem');
+              props.navigation.navigate('Redeem');
             }}>
             Redeem
           </Button>
@@ -54,11 +60,19 @@ function WelcomeScreen({navigation}) {
         />
         <Card.Content>
           <Paragraph>
-            You have 10 points. This will give you 100/= when redeemed.
+            You have {_.toNumber(props.userDetails.user.points)} points. This
+            will give you{' '}
+            {_.toNumber(
+              props.userDetails.user.points *
+                props.redeemConfigs.one_point_amount,
+            )}
+            /= when redeemed.
           </Paragraph>
           <Paragraph>
-            Note that 1 point will give you 10/= when redeemed. The minimum
-            amount you can redeem is 200/=
+            Note that 1 point will give you{' '}
+            {_.toNumber(props.redeemConfigs.one_point_amount)}/= when redeemed.
+            The minimum amount you can redeem is{' '}
+            {_.toNumber(props.redeemConfigs.min_amount_redeem)}/=
           </Paragraph>
         </Card.Content>
         {/* <Card.Cover source={{uri: 'https://picsum.photos/700'}} /> */}
@@ -73,7 +87,7 @@ function WelcomeScreen({navigation}) {
           <Button
             icon={'gift'}
             onPress={() => {
-              navigation.navigate('Redeem');
+              props.navigation.navigate('Redeem');
             }}>
             Redeem
           </Button>
@@ -83,7 +97,15 @@ function WelcomeScreen({navigation}) {
   );
 }
 
-export default WelcomeScreen;
+const mapStateToProps = ({user}) => {
+  return {
+    userDetails: user.userDetails,
+    fetchingRedeemConfigs: user.fetchingRedeemConfigs,
+    redeemConfigs: user.redeemConfigs,
+  };
+};
+
+export default connect(mapStateToProps, {getRedeemConfigs})(WelcomeScreen);
 
 const styles = StyleSheet.create({
   card: {
