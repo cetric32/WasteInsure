@@ -84,7 +84,6 @@ export const registerUser = (
       country_id,
     })
       .then(data => {
-        console.log(data);
         if (data.exception || data.errors) {
           Alert.alert('Error', data.message);
 
@@ -152,8 +151,6 @@ export const redeemWithdraw = (
 
     httpRequest('api/withdraw', 'POST', {phone, amount})
       .then(data => {
-        console.log('data', data);
-
         const newData = handleAPIResponse(data);
 
         if (newData) {
@@ -191,8 +188,6 @@ export const getRedeemConfigs = (
 
     httpRequest('api/settings', 'GET')
       .then(data => {
-        console.log('data', data);
-
         const newData = handleAPIResponse(data);
 
         if (newData) {
@@ -255,8 +250,6 @@ export const loginUser = (
       password,
     })
       .then(data => {
-        console.log('data', data);
-
         const newData = handleAPIResponse(data);
 
         if (newData) {
@@ -304,8 +297,6 @@ export const getCountries = (
 
     httpRequest('api/countries', 'GET')
       .then(data => {
-        console.log('data', data);
-
         const newData = handleAPIResponse(data);
 
         if (newData) {

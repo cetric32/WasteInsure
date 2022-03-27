@@ -17,14 +17,13 @@ export const httpRequest = async (
 ) => {
   try {
     const url = generateUrl(endPoint);
+    let token = '';
 
-    console.log('body', body);
-
-    //check if there is a token
     let authHeader = {};
-    const token = await getDataStorage('token');
 
-    console.log('token', token);
+    if (!_.includes(['countries', 'login', 'register'], endPoint)) {
+      token = await getDataStorage('token');
+    }
 
     if (token) {
       authHeader = getAuthHeader(token);
@@ -50,12 +49,19 @@ export const httpRequest = async (
 
     return response.json();
   } catch (error) {
-    console.log(error);
+    Alert.alert(
+      'Request error',
+      typeof error == 'string' ? error : JSON.stringify(error),
+    );
   }
 };
 
 export const handleAPIResponse = data => {
-  if (data.exception || data.errors) {
+  if (!data) {
+    Alert.alert('Error', 'Something went wrong. Please try again later');
+
+    return null;
+  } else if (data.errors || data.exception) {
     Alert.alert('Error', data.message);
 
     return null;
@@ -74,8 +80,6 @@ const generateUrl = endPoint => {
     '/' +
     (_.includes(['/'], endPoint[0]) ? endPoint.substring(1) : endPoint);
 
-  console.log('url', url);
-
   return url;
 };
 
@@ -91,7 +95,9 @@ export const storeDataStorage = async (key, value) => {
 export const getDataStorage = async key => {
   try {
     const jsonValue = await AsyncStorage.getItem(key);
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    return jsonValue != null || jsonValue != undefined
+      ? JSON.parse(jsonValue)
+      : null;
   } catch (e) {
     console.log(e);
   }

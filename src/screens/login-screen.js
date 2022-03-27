@@ -38,8 +38,6 @@ const LoginScreen = props => {
     });
   };
 
-  console.log(props.isSigningIn);
-
   return (
     <ScrollView
       contentContainerStyle={{
@@ -95,7 +93,6 @@ const LoginScreen = props => {
 };
 
 const mapStateToProps = ({user}) => {
-  console.log(user);
   return {
     isSigningIn: user.isSigningIn,
   };

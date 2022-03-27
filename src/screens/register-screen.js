@@ -58,7 +58,6 @@ const RegisterScreen = props => {
           selectedValue={country || ''}
           style={styles.inputs}
           onValueChange={(itemValue, itemIndex) => {
-            console.log('itemValue', itemValue, typeof itemValue);
             setCountry(itemValue);
             setPhoneCode(itemValue.phone_code);
           }}>
@@ -117,7 +116,6 @@ const RegisterScreen = props => {
 };
 
 const mapStateToProps = ({user}) => {
-  console.log(user);
   return {
     countries: user.countries,
     isRegistering: user.isRegistering,

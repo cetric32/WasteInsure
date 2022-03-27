@@ -117,8 +117,6 @@ function RedeemScreen(props) {
   const [bannerVisible, setVisible] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
 
-  console.log('isRedeeming', props.isRedeeming);
-
   return (
     <View
       style={{
@@ -232,7 +230,6 @@ function RedeemScreen(props) {
 }
 
 const mapStateToProps = ({user}) => {
-  console.log('user.isRedeeming', user.isRedeeming);
   return {
     userDetails: user.userDetails,
     fetchingRedeemConfigs: user.fetchingRedeemConfigs,
