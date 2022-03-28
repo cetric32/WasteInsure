@@ -34,6 +34,7 @@ const LoginScreen = props => {
 
   const login = () => {
     props.loginUser({phone, password}, () => {
+      setPassword('');
       props.navigation.navigate('Home');
     });
   };

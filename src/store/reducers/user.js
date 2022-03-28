@@ -5,12 +5,20 @@ import {
   FETCH_REDEEM_CONFIGS,
   FETCH_REDEEM_CONFIGS_FAILED,
   FETCH_REDEEM_CONFIGS_SUCCESSFUL,
+  FETCH_USER,
+  FETCH_USER_FAILED,
+  FETCH_USER_SUCCESSFUL,
+  FETCH_WITHDRAWALS,
+  FETCH_WITHDRAWALS_FAILED,
   REDEEM_WITHDRAW,
   REDEEM_WITHDRAW_FAILED,
   REDEEM_WITHDRAW_SUCCESSFUL,
   USER_LOGIN,
   USER_LOGIN_FAILED,
   USER_LOGIN_SUCCESSFUL,
+  USER_LOGOUT,
+  USER_LOGOUT_FAILED,
+  USER_LOGOUT_SUCCESSFUL,
 } from '../constants';
 
 const initialState = {
@@ -22,14 +30,25 @@ const initialState = {
   redeemConfigs: {},
   fetchingRedeemConfigs: false,
   isRedeeming: false,
+  fetchingUser: false,
+  withdrawals: {},
+  fetchingWithdrawals: false,
+  isSignedIn: false,
+  isSigningOut: false,
 };
+
 const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case USER_LOGIN:
       return {...state, isSigningIn: true};
 
     case USER_LOGIN_SUCCESSFUL:
-      return {...state, isSigningIn: false, userDetails: action.payload};
+      return {
+        ...state,
+        isSigningIn: false,
+        userDetails: action.payload,
+        isSignedIn: true,
+      };
 
     case USER_LOGIN_FAILED:
       return {...state, isSigningIn: false};
@@ -73,8 +92,44 @@ const UserReducer = (state = initialState, action) => {
     case REDEEM_WITHDRAW_FAILED:
       return {...state, isRedeeming: false};
 
+    case FETCH_USER:
+      return {...state, fetchingUser: true};
+
+    case FETCH_USER_SUCCESSFUL:
+      return {
+        ...state,
+        fetchingUser: false,
+        userDetails: {...state.userDetails, ...action.payload},
+      };
+
+    case FETCH_USER_FAILED:
+      return {...state, fetchingUser: false};
+
+    case FETCH_WITHDRAWALS:
+      return {...state, fetchingWithdrawals: true};
+
+    case FETCH_WITHDRAWALS:
+      return {
+        ...state,
+        fetchingWithdrawals: false,
+        withdrawals: action.payload,
+      };
+
+    case FETCH_WITHDRAWALS_FAILED:
+      return {...state, fetchingWithdrawals: false};
+
+    case USER_LOGOUT:
+      return {...state, isSigningOut: true};
+
+    case USER_LOGOUT_SUCCESSFUL:
+      return {...state, isSigningOut: true, isSignedIn: false};
+
+    case USER_LOGOUT_FAILED:
+      return {...state, isSigningOut: false};
+
     default:
       return state;
   }
 };
+
 export default UserReducer;

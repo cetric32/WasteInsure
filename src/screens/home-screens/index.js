@@ -7,9 +7,15 @@ import WelcomeScreen from './welcome-screen';
 import SettingsScreen from './settings-screen';
 import RedeemScreen from './redeem-screen';
 
-const Tab = createBottomTabNavigator();
+import {connect} from 'react-redux';
 
-export default function HomeScreen() {
+const Tab = createBottomTabNavigator();
+function HomeScreen(props) {
+  React.useEffect(() => {
+    if (!props.isSignedIn) {
+      props.navigation.navigate('Login');
+    }
+  }, [props.isSignedIn]);
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -44,3 +50,12 @@ export default function HomeScreen() {
     </Tab.Navigator>
   );
 }
+
+const mapStateToProps = ({user}) => {
+  console.log('user.isSignedIn', user.isSignedIn);
+  return {
+    isSignedIn: user.isSignedIn,
+  };
+};
+
+export default connect(mapStateToProps, {})(HomeScreen);

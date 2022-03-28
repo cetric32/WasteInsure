@@ -12,6 +12,12 @@ import {
   FETCH_REDEEM_CONFIGS,
   FETCH_REDEEM_CONFIGS_FAILED,
   FETCH_REDEEM_CONFIGS_SUCCESSFUL,
+  FETCH_USER,
+  FETCH_USER_FAILED,
+  FETCH_USER_SUCCESSFUL,
+  FETCH_WITHDRAWALS,
+  FETCH_WITHDRAWALS_FAILED,
+  FETCH_WITHDRAWALS_SUCCESSFUL,
   REDEEM_WITHDRAW,
   REDEEM_WITHDRAW_FAILED,
   REDEEM_WITHDRAW_SUCCESSFUL,
@@ -84,19 +90,23 @@ export const registerUser = (
       country_id,
     })
       .then(data => {
-        if (data.exception || data.errors) {
-          Alert.alert('Error', data.message);
+        const newData = handleAPIResponse(data);
 
-          dispatch({
-            type: REGISTER_FAILED,
-          });
-        } else {
+        if (newData) {
+          storeDataStorage('lastPhone', phone)
+            .then(() => {})
+            .catch(() => {});
+
           dispatch({
             type: REGISTER_SUCCESSFUL,
             payload: data,
           });
 
           onSuccess();
+        } else {
+          dispatch({
+            type: REGISTER_FAILED,
+          });
         }
       })
       .catch(error => {
@@ -154,6 +164,8 @@ export const redeemWithdraw = (
         const newData = handleAPIResponse(data);
 
         if (newData) {
+          dispatch(fetchUserDetails());
+
           dispatch({
             type: REDEEM_WITHDRAW_SUCCESSFUL,
             payload: newData,
@@ -213,6 +225,86 @@ export const getRedeemConfigs = (
   };
 };
 
+export const fetchUserWithdrawals = (
+  details = {},
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: FETCH_WITHDRAWALS,
+    });
+
+    httpRequest('api/withdrawals', 'GET')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: FETCH_WITHDRAWALS_SUCCESSFUL,
+            payload: newData,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: FETCH_WITHDRAWALS_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: FETCH_WITHDRAWALS_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
+
+export const fetchUserDetails = (
+  details = {},
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: FETCH_USER,
+    });
+
+    httpRequest('api/user', 'GET')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: FETCH_USER_SUCCESSFUL,
+            payload: newData,
+          });
+
+          dispatch(fetchUserWithdrawals());
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: FETCH_USER_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: FETCH_USER_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
+
 export const loginUser = (
   details,
   onSuccess = () => {},
@@ -263,8 +355,10 @@ export const loginUser = (
 
           dispatch({
             type: USER_LOGIN_SUCCESSFUL,
-            payload: data,
+            payload: newData,
           });
+
+          dispatch(fetchUserWithdrawals());
 
           onSuccess();
         } else {
