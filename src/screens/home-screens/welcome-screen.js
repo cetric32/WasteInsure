@@ -60,19 +60,19 @@ function WelcomeScreen(props) {
         />
         <Card.Content>
           <Paragraph>
-            You have {_.toNumber(props.userDetails.user.points)} points. This
-            will give you{' '}
+            You have {_.toNumber(props.userDetails.user.points).toFixed(2)}{' '}
+            points. This will give you{' '}
             {_.toNumber(
               props.userDetails.user.points *
                 props.redeemConfigs.one_point_amount,
-            )}
+            ).toFixed(2)}
             /= when redeemed.
           </Paragraph>
           <Paragraph>
             Note that 1 point will give you{' '}
-            {_.toNumber(props.redeemConfigs.one_point_amount)}/= when redeemed.
-            The minimum amount you can redeem is{' '}
-            {_.toNumber(props.redeemConfigs.min_amount_redeem)}/=
+            {_.toNumber(props.redeemConfigs.one_point_amount).toFixed(2)}/= when
+            redeemed. The minimum amount you can redeem is{' '}
+            {_.toNumber(props.redeemConfigs.min_amount_redeem).toFixed(2)}/=
           </Paragraph>
         </Card.Content>
         {/* <Card.Cover source={{uri: 'https://picsum.photos/700'}} /> */}

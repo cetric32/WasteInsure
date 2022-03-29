@@ -151,18 +151,18 @@ function RedeemScreen(props) {
           />
           <Card.Content>
             <Title>
-              {_.toNumber(props.userDetails.user.points)} Points |{' '}
+              {_.toNumber(props.userDetails.user.points).toFixed(2)} Points |{' '}
               {_.toNumber(
                 props.userDetails.user.points *
                   props.redeemConfigs.one_point_amount,
-              )}
+              ).toFixed(2)}
               /=
             </Title>
             <Paragraph>
               1 Point will give you{' '}
-              {_.toNumber(props.redeemConfigs.one_point_amount)}/=. The minimum
-              amount to withdraw is{' '}
-              {_.toNumber(props.redeemConfigs.min_amount_redeem)}/=.
+              {_.toNumber(props.redeemConfigs.one_point_amount).toFixed(2)}/=.
+              The minimum amount to withdraw is{' '}
+              {_.toNumber(props.redeemConfigs.min_amount_redeem).toFixed(2)}/=.
             </Paragraph>
             <Paragraph>
               Note that withdrawal fees apply on the amount and will be deducted
