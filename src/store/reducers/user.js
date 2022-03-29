@@ -1,4 +1,7 @@
 import {
+  FETCH_AGENTS,
+  FETCH_AGENTS_FAILED,
+  FETCH_AGENTS_SUCCESSFUL,
   FETCH_COUNTRIES,
   FETCH_COUNTRIES_FAILED,
   FETCH_COUNTRIES_SUCCESSFUL,
@@ -10,6 +13,7 @@ import {
   FETCH_USER_SUCCESSFUL,
   FETCH_WITHDRAWALS,
   FETCH_WITHDRAWALS_FAILED,
+  FETCH_WITHDRAWALS_SUCCESSFUL,
   REDEEM_WITHDRAW,
   REDEEM_WITHDRAW_FAILED,
   REDEEM_WITHDRAW_SUCCESSFUL,
@@ -35,6 +39,8 @@ const initialState = {
   fetchingWithdrawals: false,
   isSignedIn: false,
   isSigningOut: false,
+  agents: [],
+  fetchingAgents: false,
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -108,7 +114,7 @@ const UserReducer = (state = initialState, action) => {
     case FETCH_WITHDRAWALS:
       return {...state, fetchingWithdrawals: true};
 
-    case FETCH_WITHDRAWALS:
+    case FETCH_WITHDRAWALS_SUCCESSFUL:
       return {
         ...state,
         fetchingWithdrawals: false,
@@ -126,6 +132,15 @@ const UserReducer = (state = initialState, action) => {
 
     case USER_LOGOUT_FAILED:
       return {...state, isSigningOut: false};
+
+    case FETCH_AGENTS:
+      return {...state, fetchingAgents: true};
+
+    case FETCH_AGENTS_SUCCESSFUL:
+      return {...state, fetchingAgents: true, agents: action.payload};
+
+    case FETCH_AGENTS_FAILED:
+      return {...state, fetchingAgents: false};
 
     default:
       return state;

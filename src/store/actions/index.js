@@ -6,6 +6,9 @@ import {
   storeDataStorage,
 } from '../../common/functions';
 import {
+  FETCH_AGENTS,
+  FETCH_AGENTS_FAILED,
+  FETCH_AGENTS_SUCCESSFUL,
   FETCH_COUNTRIES,
   FETCH_COUNTRIES_FAILED,
   FETCH_COUNTRIES_SUCCESSFUL,
@@ -305,6 +308,45 @@ export const fetchUserDetails = (
   };
 };
 
+export const fetchUserAgents = (
+  details = {},
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: FETCH_AGENTS,
+    });
+
+    httpRequest('api/collection_centers', 'GET')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: FETCH_AGENTS_SUCCESSFUL,
+            payload: newData,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: FETCH_AGENTS_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: FETCH_AGENTS_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
+
 export const loginUser = (
   details,
   onSuccess = () => {},
@@ -345,6 +387,8 @@ export const loginUser = (
         const newData = handleAPIResponse(data);
 
         if (newData) {
+          dispatch(fetchUserWithdrawals());
+          dispatch(fetchUserAgents());
           storeDataStorage('token', newData.token)
             .then(() => {})
             .catch(() => {});
@@ -357,8 +401,6 @@ export const loginUser = (
             type: USER_LOGIN_SUCCESSFUL,
             payload: newData,
           });
-
-          dispatch(fetchUserWithdrawals());
 
           onSuccess();
         } else {

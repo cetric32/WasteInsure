@@ -16,6 +16,8 @@ import {
   Divider,
 } from 'react-native-paper';
 import agents from './agents.json';
+import {SUPPORT_MAIL, SUPPORT_PHONE_NUMBER} from '../common/constants';
+import {connect} from 'react-redux';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
@@ -41,27 +43,26 @@ const AgentsScreen = props => {
           <Button
             icon={'phone'}
             onPress={() => {
-              Linking.openURL('tel:+254797224768');
+              Linking.openURL(`tel:${SUPPORT_PHONE_NUMBER}`);
             }}>
             Call Support
           </Button>
           <Button
             icon={'email'}
             onPress={() => {
-              Linking.openURL('mailto:info@wasteinsure.com');
+              Linking.openURL(`mailto:${SUPPORT_MAIL}`);
             }}>
             Email Support
           </Button>
         </Card.Actions>
       </Card>
       <ScrollView>
-        {agents.map((agent, key) => {
+        {props.agents.map((agent, key) => {
           return (
-            <>
+            <View key={String(agent.id)}>
               <List.Item
-                key={key}
                 title={agent.name}
-                description={agent.location}
+                description={agent.address}
                 left={props => <List.Icon {...props} icon="map-marker" />}
                 style={{
                   width: inputsWidth,
@@ -84,7 +85,7 @@ const AgentsScreen = props => {
                 }}
               />
               <Divider />
-            </>
+            </View>
           );
         })}
       </ScrollView>
@@ -92,6 +93,12 @@ const AgentsScreen = props => {
   );
 };
 
-export default AgentsScreen;
+const mapStateToProps = ({user}) => {
+  return {
+    agents: user.agents,
+  };
+};
+
+export default connect(mapStateToProps, {})(AgentsScreen);
 
 const styles = StyleSheet.create({});

@@ -8,6 +8,7 @@ import SettingsScreen from './settings-screen';
 import RedeemScreen from './redeem-screen';
 
 import {connect} from 'react-redux';
+import TransactionsScreen from './transactions';
 
 const Tab = createBottomTabNavigator();
 function HomeScreen(props) {
@@ -28,6 +29,8 @@ function HomeScreen(props) {
             iconName = focused ? 'cog' : 'cog';
           } else if (route.name === 'Redeem') {
             iconName = focused ? 'dollar-sign' : 'gift';
+          } else if (route.name === 'Transactions') {
+            iconName = focused ? 'hand-holding-usd' : 'hand-holding-usd';
           }
 
           // You can return any component that you like here!
@@ -46,13 +49,13 @@ function HomeScreen(props) {
         component={RedeemScreen}
         options={{title: 'Redeem'}}
       />
+      <Tab.Screen name="Transactions" component={TransactionsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
 }
 
 const mapStateToProps = ({user}) => {
-  console.log('user.isSignedIn', user.isSignedIn);
   return {
     isSignedIn: user.isSignedIn,
   };
