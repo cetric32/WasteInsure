@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {BASE_URL} from './constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
+import VersionInfo from 'react-native-version-info';
 
 export const getAuthHeader = token => {
   return {
@@ -18,6 +19,8 @@ export const httpRequest = async (
   try {
     const url = generateUrl(endPoint);
     let token = '';
+
+    console.log('VersionInfo', VersionInfo);
 
     let authHeader = {};
 
@@ -37,6 +40,7 @@ export const httpRequest = async (
         ...{
           ...headers,
           ...authHeader,
+          ...VersionInfo,
         },
       },
     };
