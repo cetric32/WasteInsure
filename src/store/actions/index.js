@@ -6,12 +6,18 @@ import {
   storeDataStorage,
 } from '../../common/functions';
 import {
+  COLLECT_WASTE,
+  COLLECT_WASTE_FAILED,
+  COLLECT_WASTE_SUCCESSFUL,
   FETCH_AGENTS,
   FETCH_AGENTS_FAILED,
   FETCH_AGENTS_SUCCESSFUL,
   FETCH_COUNTRIES,
   FETCH_COUNTRIES_FAILED,
   FETCH_COUNTRIES_SUCCESSFUL,
+  FETCH_PLASTIC_TYPES,
+  FETCH_PLASTIC_TYPES_FAILED,
+  FETCH_PLASTIC_TYPES_SUCCESSFUL,
   FETCH_REDEEM_CONFIGS,
   FETCH_REDEEM_CONFIGS_FAILED,
   FETCH_REDEEM_CONFIGS_SUCCESSFUL,
@@ -44,7 +50,7 @@ export const registerUser = (
 
     const {name, phone, email, password, country_id} = details;
 
-    if (!name) {
+    if (!name || name.trim().indexOf(' ') == -1) {
       Alert.alert('Name Required', 'Please provide your full name');
 
       dispatch({
@@ -115,6 +121,81 @@ export const registerUser = (
       .catch(error => {
         dispatch({
           type: REGISTER_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
+
+export const collectUserWaste = (
+  details,
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: COLLECT_WASTE,
+    });
+
+    const {phone, type, quantity} = details;
+
+    if (!type) {
+      Alert.alert('Type Required', 'Please provide plastic type');
+
+      dispatch({
+        type: COLLECT_WASTE_FAILED,
+      });
+
+      return;
+    }
+
+    if (!phone || phone.length < 5) {
+      Alert.alert('Phone Required', 'Please provide your phone number');
+
+      dispatch({
+        type: COLLECT_WASTE_FAILED,
+      });
+
+      return;
+    }
+
+    if (!quantity) {
+      Alert.alert('Quantity Required', 'Please provide quantity');
+
+      dispatch({
+        type: COLLECT_WASTE_FAILED,
+      });
+
+      return;
+    }
+
+    httpRequest('api/deliver_transactions', 'POST', {
+      phone,
+      type,
+      quantity,
+    })
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: COLLECT_WASTE_SUCCESSFUL,
+            payload: data,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: COLLECT_WASTE_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: COLLECT_WASTE_FAILED,
         });
 
         console.log(error);
@@ -267,6 +348,45 @@ export const fetchUserWithdrawals = (
   };
 };
 
+export const fetchUserPlasticTypes = (
+  details = {},
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: FETCH_PLASTIC_TYPES,
+    });
+
+    httpRequest('api/plastics', 'GET')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: FETCH_PLASTIC_TYPES_SUCCESSFUL,
+            payload: newData.data,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: FETCH_PLASTIC_TYPES_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: FETCH_PLASTIC_TYPES_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
+
 export const fetchUserDetails = (
   details = {},
   onSuccess = () => {},
@@ -389,6 +509,8 @@ export const loginUser = (
         if (newData) {
           dispatch(fetchUserWithdrawals());
           dispatch(fetchUserAgents());
+          dispatch(fetchUserPlasticTypes());
+
           storeDataStorage('token', newData.token)
             .then(() => {})
             .catch(() => {});

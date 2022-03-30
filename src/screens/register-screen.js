@@ -44,7 +44,6 @@ const RegisterScreen = props => {
         flex: 1,
         flexDirection: 'row',
       }}>
-      <Text>RegisterScreen</Text>
       <TextInput
         label="Full Names"
         value={name}

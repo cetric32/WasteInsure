@@ -9,6 +9,8 @@ import RedeemScreen from './redeem-screen';
 
 import {connect} from 'react-redux';
 import TransactionsScreen from './transactions';
+import CollectWasteScreen from './collect-waste-screen';
+import AgentTransactionsScreen from './transactions/agent-transactions-screen';
 
 const Tab = createBottomTabNavigator();
 function HomeScreen(props) {
@@ -17,47 +19,79 @@ function HomeScreen(props) {
       props.navigation.navigate('Login');
     }
   }, [props.isSignedIn]);
-  return (
-    <Tab.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          let iconName;
 
-          if (route.name === 'Welcome') {
-            iconName = focused ? 'home' : 'home';
-          } else if (route.name === 'Settings') {
-            iconName = focused ? 'cog' : 'cog';
-          } else if (route.name === 'Redeem') {
-            iconName = focused ? 'dollar-sign' : 'gift';
-          } else if (route.name === 'Transactions') {
-            iconName = focused ? 'hand-holding-usd' : 'hand-holding-usd';
-          }
+  console.log('props.isAgent', props.isAgent);
 
-          // You can return any component that you like here!
-          return <FontAwesome5 name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: 'green',
-        tabBarInactiveTintColor: 'gray',
-      })}>
-      <Tab.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{title: 'Home'}}
-      />
-      <Tab.Screen
-        name="Redeem"
-        component={RedeemScreen}
-        options={{title: 'Redeem'}}
-      />
-      <Tab.Screen name="Transactions" component={TransactionsScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
-    </Tab.Navigator>
-  );
+  const getIconName = (route, focused) => {
+    let iconName;
+
+    if (route.name === 'Welcome') {
+      iconName = focused ? 'home' : 'home';
+    } else if (route.name === 'Settings') {
+      iconName = focused ? 'cog' : 'cog';
+    } else if (route.name === 'Redeem') {
+      iconName = focused ? 'dollar-sign' : 'gift';
+    } else if (route.name === 'Transactions') {
+      iconName = focused ? 'hand-holding-usd' : 'hand-holding-usd';
+    } else if (route.name === 'Collect') {
+      iconName = focused ? 'plus' : 'plus';
+    }
+
+    return iconName;
+  };
+
+  if (props.isAgent) {
+    return (
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
+            const iconName = getIconName(route, focused);
+
+            // You can return any component that you like here!
+            return <FontAwesome5 name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'green',
+          tabBarInactiveTintColor: 'gray',
+        })}>
+        <Tab.Screen name="Transactions" component={AgentTransactionsScreen} />
+        <Tab.Screen name="Collect" component={CollectWasteScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    );
+  } else {
+    return (
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          tabBarIcon: ({focused, color, size}) => {
+            const iconName = getIconName(route, focused);
+
+            // You can return any component that you like here!
+            return <FontAwesome5 name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'green',
+          tabBarInactiveTintColor: 'gray',
+        })}>
+        <Tab.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{title: 'Home'}}
+        />
+        <Tab.Screen
+          name="Redeem"
+          component={RedeemScreen}
+          options={{title: 'Redeem'}}
+        />
+        <Tab.Screen name="Transactions" component={TransactionsScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    );
+  }
 }
 
 const mapStateToProps = ({user}) => {
   return {
     isSignedIn: user.isSignedIn,
+    isAgent: user.userDetails.user.isAgent,
   };
 };
 

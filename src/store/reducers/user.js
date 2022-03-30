@@ -1,10 +1,16 @@
 import {
+  COLLECT_WASTE,
+  COLLECT_WASTE_FAILED,
+  COLLECT_WASTE_SUCCESSFUL,
   FETCH_AGENTS,
   FETCH_AGENTS_FAILED,
   FETCH_AGENTS_SUCCESSFUL,
   FETCH_COUNTRIES,
   FETCH_COUNTRIES_FAILED,
   FETCH_COUNTRIES_SUCCESSFUL,
+  FETCH_PLASTIC_TYPES,
+  FETCH_PLASTIC_TYPES_FAILED,
+  FETCH_PLASTIC_TYPES_SUCCESSFUL,
   FETCH_REDEEM_CONFIGS,
   FETCH_REDEEM_CONFIGS_FAILED,
   FETCH_REDEEM_CONFIGS_SUCCESSFUL,
@@ -41,6 +47,9 @@ const initialState = {
   isSigningOut: false,
   agents: [],
   fetchingAgents: false,
+  collectingWaste: false,
+  plasticTypes: [],
+  fetchingPlasticTypes: false,
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -141,6 +150,26 @@ const UserReducer = (state = initialState, action) => {
 
     case FETCH_AGENTS_FAILED:
       return {...state, fetchingAgents: false};
+
+    case COLLECT_WASTE:
+      return {...state, collectingWaste: true};
+
+    case COLLECT_WASTE_SUCCESSFUL:
+    case COLLECT_WASTE_FAILED:
+      return {...state, collectingWaste: false};
+
+    case FETCH_PLASTIC_TYPES:
+      return {...state, fetchingPlasticTypes: true};
+
+    case FETCH_PLASTIC_TYPES_SUCCESSFUL:
+      return {
+        ...state,
+        fetchingPlasticTypes: true,
+        plasticTypes: action.payload,
+      };
+
+    case FETCH_PLASTIC_TYPES_FAILED:
+      return {...state, fetchingPlasticTypes: false};
 
     default:
       return state;
