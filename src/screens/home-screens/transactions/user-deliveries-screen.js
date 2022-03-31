@@ -30,11 +30,29 @@ function TransactionModal({visible, hideModal, transaction}) {
       <Modal visible={visible} onDismiss={hideModal}>
         <Card>
           <Card.Content>
-            <Title> Collected Plastic Waste</Title>
+            <Title> Delivered Plastic Waste</Title>
             <DataTable.Row>
               <DataTable.Cell>Quantity</DataTable.Cell>
               <DataTable.Cell numeric>
                 {`${_.toNumber(transaction.quantity).toFixed(2)} KG`}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Points</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {`${_.toNumber(transaction.points).toFixed(2)}`}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Points Before</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {`${_.toNumber(transaction.points_before).toFixed(2)}`}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Points After</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {`${_.toNumber(transaction.points_after).toFixed(2)}`}
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
@@ -45,9 +63,15 @@ function TransactionModal({visible, hideModal, transaction}) {
             </DataTable.Row>
 
             <DataTable.Row>
-              <DataTable.Cell>Customer Number</DataTable.Cell>
+              <DataTable.Cell>Collection Center</DataTable.Cell>
               <DataTable.Cell
-                numeric>{`${transaction.user_phone}`}</DataTable.Cell>
+                numeric>{`${transaction.center_name}`}</DataTable.Cell>
+            </DataTable.Row>
+
+            <DataTable.Row>
+              <DataTable.Cell>Agent Name</DataTable.Cell>
+              <DataTable.Cell
+                numeric>{`${transaction.agent_name}`}</DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Transaction ID</DataTable.Cell>
@@ -67,7 +91,7 @@ function TransactionModal({visible, hideModal, transaction}) {
   );
 }
 
-function AgentTransactionsScreen(props) {
+function UserDeliveriesScreen(props) {
   const [currentTransaction, setCurrentTransaction] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -140,11 +164,11 @@ function AgentTransactionsScreen(props) {
 
 const mapStateToProps = ({user}) => {
   return {
-    withdrawals: user.agentCollections,
+    withdrawals: user.deliveries,
   };
 };
 
-export default connect(mapStateToProps, {})(AgentTransactionsScreen);
+export default connect(mapStateToProps, {})(UserDeliveriesScreen);
 
 const styles = StyleSheet.create({
   listItem: {
@@ -154,5 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 5,
     margin: 10,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
 });

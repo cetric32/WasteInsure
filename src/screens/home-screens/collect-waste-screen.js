@@ -46,7 +46,16 @@ const CollectWasteScreen = props => {
         flex: 1,
         flexDirection: 'row',
       }}>
-      <Paragraph>Please Enter the details of the customer below</Paragraph>
+      <Paragraph style={styles.inputs}>
+        Please Enter the details of the customer below. If they already have
+        WasteInsure app, they should give you the phone number they registered
+        with.
+      </Paragraph>
+      <Paragraph style={styles.inputs}>
+        Note that you can only collect from a person with a mobile number in
+        {` ${country.name}`}. If they have a number for a different country
+        contact support for help.
+      </Paragraph>
       <TextInput
         label="Phone Number"
         value={phone}
@@ -64,7 +73,7 @@ const CollectWasteScreen = props => {
           onValueChange={(itemValue, itemIndex) => {
             setType(itemValue);
           }}>
-          <Picker.Item label="Select Type" value="" />
+          <Picker.Item label="Select Plastic Type" value="" />
           {_.map(props.plasticTypes, c => {
             return <Picker.Item label={c.name} value={c} key={c.id} />;
           })}

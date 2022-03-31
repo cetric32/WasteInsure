@@ -12,6 +12,9 @@ import {
   FETCH_AGENTS,
   FETCH_AGENTS_FAILED,
   FETCH_AGENTS_SUCCESSFUL,
+  FETCH_AGENT_COLLECTIONS,
+  FETCH_AGENT_COLLECTIONS_FAILED,
+  FETCH_AGENT_COLLECTIONS_SUCCESSFUL,
   FETCH_COUNTRIES,
   FETCH_COUNTRIES_FAILED,
   FETCH_COUNTRIES_SUCCESSFUL,
@@ -22,6 +25,9 @@ import {
   FETCH_REDEEM_CONFIGS_FAILED,
   FETCH_REDEEM_CONFIGS_SUCCESSFUL,
   FETCH_USER,
+  FETCH_USER_DELIVERIES,
+  FETCH_USER_DELIVERIES_FAILED,
+  FETCH_USER_DELIVERIES_SUCCESSFUL,
   FETCH_USER_FAILED,
   FETCH_USER_SUCCESSFUL,
   FETCH_WITHDRAWALS,
@@ -181,6 +187,8 @@ export const collectUserWaste = (
         const newData = handleAPIResponse(data);
 
         if (newData) {
+          dispatch(fetchUserCollections());
+
           dispatch({
             type: COLLECT_WASTE_SUCCESSFUL,
             payload: data,
@@ -348,6 +356,44 @@ export const fetchUserWithdrawals = (
   };
 };
 
+export const fetchUserCollections = (
+  details = {},
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: FETCH_AGENT_COLLECTIONS,
+    });
+
+    httpRequest('api/agent_collections', 'GET')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: FETCH_AGENT_COLLECTIONS_SUCCESSFUL,
+            payload: newData,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: FETCH_AGENT_COLLECTIONS_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: FETCH_AGENT_COLLECTIONS_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
 export const fetchUserPlasticTypes = (
   details = {},
   onSuccess = () => {},
@@ -419,6 +465,45 @@ export const fetchUserDetails = (
       .catch(error => {
         dispatch({
           type: FETCH_USER_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
+      });
+  };
+};
+
+export const fetchUserDeliveries = (
+  details = {},
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: FETCH_USER_DELIVERIES,
+    });
+
+    httpRequest('api/my_deliver_transactions', 'GET')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          dispatch({
+            type: FETCH_USER_DELIVERIES_SUCCESSFUL,
+            payload: newData,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: FETCH_USER_DELIVERIES_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: FETCH_USER_DELIVERIES_FAILED,
         });
 
         console.log(error);
@@ -507,9 +592,14 @@ export const loginUser = (
         const newData = handleAPIResponse(data);
 
         if (newData) {
-          dispatch(fetchUserWithdrawals());
-          dispatch(fetchUserAgents());
-          dispatch(fetchUserPlasticTypes());
+          if (newData.user.isAgent) {
+            dispatch(fetchUserPlasticTypes());
+            dispatch(fetchUserCollections());
+          } else {
+            dispatch(fetchUserDeliveries());
+            dispatch(fetchUserWithdrawals());
+            dispatch(fetchUserAgents());
+          }
 
           storeDataStorage('token', newData.token)
             .then(() => {})

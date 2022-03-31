@@ -11,6 +11,8 @@ import {connect} from 'react-redux';
 import TransactionsScreen from './transactions';
 import CollectWasteScreen from './collect-waste-screen';
 import AgentTransactionsScreen from './transactions/agent-transactions-screen';
+import UserDeliveriesScreen from './transactions/user-deliveries-screen';
+import UpdateAppScreen from './update-screen';
 
 const Tab = createBottomTabNavigator();
 function HomeScreen(props) {
@@ -21,6 +23,7 @@ function HomeScreen(props) {
   }, [props.isSignedIn]);
 
   console.log('props.isAgent', props.isAgent);
+  console.log('shouldUpdateApp', props.shouldUpdateApp);
 
   const getIconName = (route, focused) => {
     let iconName;
@@ -35,56 +38,64 @@ function HomeScreen(props) {
       iconName = focused ? 'hand-holding-usd' : 'hand-holding-usd';
     } else if (route.name === 'Collect') {
       iconName = focused ? 'plus' : 'plus';
+    } else if (route.name === 'Deliveries') {
+      iconName = focused ? 'plus' : 'plus';
     }
 
     return iconName;
   };
 
-  if (props.isAgent) {
-    return (
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
-            const iconName = getIconName(route, focused);
-
-            // You can return any component that you like here!
-            return <FontAwesome5 name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: 'green',
-          tabBarInactiveTintColor: 'gray',
-        })}>
-        <Tab.Screen name="Transactions" component={AgentTransactionsScreen} />
-        <Tab.Screen name="Collect" component={CollectWasteScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    );
+  if (props.shouldUpdateApp) {
+    return <UpdateAppScreen />;
   } else {
-    return (
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
-            const iconName = getIconName(route, focused);
+    if (props.isAgent) {
+      return (
+        <Tab.Navigator
+          initialRouteName="Collect"
+          screenOptions={({route}) => ({
+            tabBarIcon: ({focused, color, size}) => {
+              const iconName = getIconName(route, focused);
 
-            // You can return any component that you like here!
-            return <FontAwesome5 name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: 'green',
-          tabBarInactiveTintColor: 'gray',
-        })}>
-        <Tab.Screen
-          name="Welcome"
-          component={WelcomeScreen}
-          options={{title: 'Home'}}
-        />
-        <Tab.Screen
-          name="Redeem"
-          component={RedeemScreen}
-          options={{title: 'Redeem'}}
-        />
-        <Tab.Screen name="Transactions" component={TransactionsScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    );
+              // You can return any component that you like here!
+              return <FontAwesome5 name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'green',
+            tabBarInactiveTintColor: 'gray',
+          })}>
+          <Tab.Screen name="Transactions" component={AgentTransactionsScreen} />
+          <Tab.Screen name="Collect" component={CollectWasteScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+        </Tab.Navigator>
+      );
+    } else {
+      return (
+        <Tab.Navigator
+          screenOptions={({route}) => ({
+            tabBarIcon: ({focused, color, size}) => {
+              const iconName = getIconName(route, focused);
+
+              // You can return any component that you like here!
+              return <FontAwesome5 name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'green',
+            tabBarInactiveTintColor: 'gray',
+          })}>
+          <Tab.Screen
+            name="Welcome"
+            component={WelcomeScreen}
+            options={{title: 'Home'}}
+          />
+          <Tab.Screen
+            name="Redeem"
+            component={RedeemScreen}
+            options={{title: 'Redeem'}}
+          />
+          <Tab.Screen name="Transactions" component={TransactionsScreen} />
+          <Tab.Screen name="Deliveries" component={UserDeliveriesScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+        </Tab.Navigator>
+      );
+    }
   }
 }
 
@@ -92,6 +103,7 @@ const mapStateToProps = ({user}) => {
   return {
     isSignedIn: user.isSignedIn,
     isAgent: user.userDetails.user.isAgent,
+    shouldUpdateApp: user.userDetails.user.shouldUpdateApp,
   };
 };
 

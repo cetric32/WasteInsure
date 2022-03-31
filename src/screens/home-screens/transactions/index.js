@@ -11,7 +11,6 @@ import {
   Portal,
   Modal,
   Provider,
-  Paragraph,
   Card,
   DataTable,
 } from 'react-native-paper';
@@ -20,6 +19,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 
 const inputsWidth = Dimensions.get('window').width - 25;
+const height = Dimensions.get('window').height - 10;
 
 function TransactionModal({visible, hideModal, transaction}) {
   console.log('====================================');
@@ -27,11 +27,7 @@ function TransactionModal({visible, hideModal, transaction}) {
   console.log('====================================');
   return (
     <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={hideModal}
-        //</Portal>contentContainerStyle={styles.containerStyle}
-      >
+      <Modal visible={visible} onDismiss={hideModal}>
         <Card>
           <Card.Content>
             <Title> Withdraw Mobile Money</Title>
@@ -115,7 +111,11 @@ function TransactionsScreen(props) {
   } else {
     return (
       <ScrollView
-        contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
+        contentContainerStyle={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: height,
+        }}
         style={{flex: 1}}>
         <Provider>
           <TransactionModal

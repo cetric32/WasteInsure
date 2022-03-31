@@ -5,6 +5,9 @@ import {
   FETCH_AGENTS,
   FETCH_AGENTS_FAILED,
   FETCH_AGENTS_SUCCESSFUL,
+  FETCH_AGENT_COLLECTIONS,
+  FETCH_AGENT_COLLECTIONS_FAILED,
+  FETCH_AGENT_COLLECTIONS_SUCCESSFUL,
   FETCH_COUNTRIES,
   FETCH_COUNTRIES_FAILED,
   FETCH_COUNTRIES_SUCCESSFUL,
@@ -15,6 +18,9 @@ import {
   FETCH_REDEEM_CONFIGS_FAILED,
   FETCH_REDEEM_CONFIGS_SUCCESSFUL,
   FETCH_USER,
+  FETCH_USER_DELIVERIES,
+  FETCH_USER_DELIVERIES_FAILED,
+  FETCH_USER_DELIVERIES_SUCCESSFUL,
   FETCH_USER_FAILED,
   FETCH_USER_SUCCESSFUL,
   FETCH_WITHDRAWALS,
@@ -50,6 +56,10 @@ const initialState = {
   collectingWaste: false,
   plasticTypes: [],
   fetchingPlasticTypes: false,
+  agentCollections: {},
+  fetchingAgentCollections: false,
+  deliveries: {},
+  fetchingDeliveries: false,
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -170,6 +180,28 @@ const UserReducer = (state = initialState, action) => {
 
     case FETCH_PLASTIC_TYPES_FAILED:
       return {...state, fetchingPlasticTypes: false};
+
+    case FETCH_AGENT_COLLECTIONS:
+      return {...state, fetchingAgentCollections: true};
+
+    case FETCH_AGENT_COLLECTIONS_SUCCESSFUL:
+      return {
+        ...state,
+        fetchingAgentCollections: false,
+        agentCollections: action.payload,
+      };
+
+    case FETCH_AGENT_COLLECTIONS_FAILED:
+      return {...state, fetchingAgentCollections: false};
+
+    case FETCH_USER_DELIVERIES:
+      return {...state, fetchingDeliveries: true};
+
+    case FETCH_USER_DELIVERIES_SUCCESSFUL:
+      return {...state, fetchingDeliveries: false, deliveries: action.payload};
+
+    case FETCH_USER_DELIVERIES_FAILED:
+      return {...state, fetchingDeliveries: false};
 
     default:
       return state;
