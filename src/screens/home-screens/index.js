@@ -4,7 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import WelcomeScreen from './welcome-screen';
-import SettingsScreen from './settings-screen';
+import ProfileScreen from './profile-screen';
 import RedeemScreen from './redeem-screen';
 
 import {connect} from 'react-redux';
@@ -15,6 +15,7 @@ import UserDeliveriesScreen from './transactions/user-deliveries-screen';
 import UpdateAppScreen from './update-screen';
 
 const Tab = createBottomTabNavigator();
+
 function HomeScreen(props) {
   React.useEffect(() => {
     if (!props.isSignedIn) {
@@ -22,16 +23,16 @@ function HomeScreen(props) {
     }
   }, [props.isSignedIn]);
 
-  console.log('props.isAgent', props.isAgent);
-  console.log('shouldUpdateApp', props.shouldUpdateApp);
+  const tabBarActiveTintColor = 'tomato';
+  const tabBarInactiveTintColor = 'green';
 
   const getIconName = (route, focused) => {
     let iconName;
 
     if (route.name === 'Welcome') {
       iconName = focused ? 'home' : 'home';
-    } else if (route.name === 'Settings') {
-      iconName = focused ? 'cog' : 'cog';
+    } else if (route.name === 'Profile') {
+      iconName = focused ? 'user' : 'user';
     } else if (route.name === 'Redeem') {
       iconName = focused ? 'dollar-sign' : 'gift';
     } else if (route.name === 'Transactions') {
@@ -59,12 +60,12 @@ function HomeScreen(props) {
               // You can return any component that you like here!
               return <FontAwesome5 name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'green',
-            tabBarInactiveTintColor: 'gray',
+            tabBarActiveTintColor: tabBarActiveTintColor,
+            tabBarInactiveTintColor: tabBarInactiveTintColor,
           })}>
           <Tab.Screen name="Transactions" component={AgentTransactionsScreen} />
           <Tab.Screen name="Collect" component={CollectWasteScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
       );
     } else {
@@ -77,8 +78,8 @@ function HomeScreen(props) {
               // You can return any component that you like here!
               return <FontAwesome5 name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'green',
-            tabBarInactiveTintColor: 'gray',
+            tabBarActiveTintColor: tabBarActiveTintColor,
+            tabBarInactiveTintColor: tabBarInactiveTintColor,
           })}>
           <Tab.Screen
             name="Welcome"
@@ -92,7 +93,7 @@ function HomeScreen(props) {
           />
           <Tab.Screen name="Transactions" component={TransactionsScreen} />
           <Tab.Screen name="Deliveries" component={UserDeliveriesScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
         </Tab.Navigator>
       );
     }
