@@ -18,7 +18,9 @@ function ProfileScreen(props) {
       }}>
       <DataTable.Row style={styles.row}>
         <DataTable.Cell>Name</DataTable.Cell>
-        <DataTable.Cell numeric>{props.user.name}</DataTable.Cell>
+        <DataTable.Cell numeric>
+          {props.user.name || 'Not Provided'}
+        </DataTable.Cell>
       </DataTable.Row>
       <DataTable.Row style={styles.row}>
         <DataTable.Cell>Phone Number</DataTable.Cell>

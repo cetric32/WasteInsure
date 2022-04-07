@@ -61,12 +61,21 @@ export const httpRequest = async (
 };
 
 export const handleAPIResponse = data => {
+  let showMessage = '';
   if (!data) {
     Alert.alert('Error', 'Something went wrong. Please try again later');
 
     return null;
   } else if (data.errors || data.exception) {
-    Alert.alert('Error', data.message);
+    showMessage = data.message + '\n';
+
+    if (data.errors) {
+      for (const key in data.errors) {
+        showMessage += ' ->' + data.errors[key][0] + '\n';
+      }
+    }
+
+    Alert.alert('Error', showMessage);
 
     return null;
   } else {
