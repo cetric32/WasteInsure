@@ -79,6 +79,16 @@ const CollectWasteScreen = props => {
           })}
         </Picker>
       </View>
+      {type ? (
+        <Paragraph
+          style={{
+            width: inputsWidth - 10,
+            color: 'gray',
+            fontStyle: 'italic',
+          }}>
+          {type.examples}
+        </Paragraph>
+      ) : null}
 
       <TextInput
         label="Quantity( In KGs)"

@@ -15,7 +15,6 @@ import {
   Avatar,
   Divider,
 } from 'react-native-paper';
-import agents from './agents.json';
 import {SUPPORT_MAIL, SUPPORT_PHONE_NUMBER} from '../common/constants';
 import {connect} from 'react-redux';
 
