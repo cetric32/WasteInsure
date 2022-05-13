@@ -56,7 +56,7 @@ const AgentsScreen = props => {
         </Card.Actions>
       </Card>
       <ScrollView>
-        {props.agents.map((agent, key) => {
+        {props.agents.data.map((agent, key) => {
           return (
             <View key={String(agent.id)}>
               <List.Item
