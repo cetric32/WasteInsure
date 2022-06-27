@@ -102,7 +102,7 @@ function WithdrawModal({
         <Button
           loading={isRedeeming}
           disabled={isRedeeming}
-          icon={require('../../images/money.png')}
+          //icon={require('../../images/money.png')}
           mode="contained"
           style={[{backgroundColor: 'green'}, styles.inputs]}
           onPress={withdraw}>
@@ -171,7 +171,7 @@ function RedeemScreen(props) {
           </Card.Content>
           <Card.Actions>
             <Button
-              icon={require('../../images/money.png')}
+              //icon={require('../../images/money.png')}
               onPress={() => {
                 setVisible(false);
                 setModalVisible(true);
