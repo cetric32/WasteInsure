@@ -19,8 +19,8 @@ import {useState} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 import {useEffect} from 'react';
-import {getDataStorage} from '../../common/functions';
-import {redeemWithdraw} from '../../store/actions';
+import {formatNumber, getDataStorage} from '../common/functions';
+import {redeemWithdraw} from '../store/actions';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
@@ -143,26 +143,24 @@ function RedeemScreen(props) {
           <Card.Title
             title="My Earnings"
             left={props => (
-              <Avatar.Icon
-                {...props}
-                icon={require('../../images/salary.png')}
-              />
+              <Avatar.Icon {...props} icon={require('../images/salary.png')} />
             )}
           />
           <Card.Content>
             <Title>
-              {_.toNumber(props.userDetails.user.points).toFixed(2)} Points |{' '}
-              {_.toNumber(
+              {formatNumber(props.userDetails.user.points)} Points |{' '}
+              {formatNumber(
                 props.userDetails.user.points *
                   props.redeemConfigs.one_point_amount,
-              ).toFixed(2)}
+              )}
               /=
             </Title>
             <Paragraph>
               1 Point will give you{' '}
-              {_.toNumber(props.redeemConfigs.one_point_amount).toFixed(2)}/=.
-              The minimum amount to withdraw is{' '}
-              {_.toNumber(props.redeemConfigs.min_amount_redeem).toFixed(2)}/=.
+              {formatNumber(props.redeemConfigs.one_point_amount)}/=. The
+              minimum amount to withdraw is{' '}
+              {formatNumber(props.redeemConfigs.min_amount_redeem)}
+              /=.
             </Paragraph>
             <Paragraph>
               Note that withdrawal fees apply on the amount and will be deducted

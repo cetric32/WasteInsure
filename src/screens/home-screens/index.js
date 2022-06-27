@@ -5,7 +5,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import WelcomeScreen from './welcome-screen';
 import ProfileScreen from './profile-screen';
-import RedeemScreen from './redeem-screen';
+//import RedeemScreen from '../redeem-screen';
 
 import {connect} from 'react-redux';
 import TransactionsScreen from './transactions';
@@ -105,11 +105,11 @@ function HomeScreen(props) {
             component={WelcomeScreen}
             options={{title: 'Home', headerShown: false}}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="Redeem"
             component={RedeemScreen}
             options={{title: 'REDEEM'}}
-          />
+          /> */}
           <Tab.Screen
             name="Transactions"
             component={TransactionsScreen}

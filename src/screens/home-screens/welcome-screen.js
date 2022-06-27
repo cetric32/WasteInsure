@@ -13,6 +13,7 @@ import {getRedeemConfigs} from '../../store/actions';
 
 import {useEffect} from 'react';
 import _ from 'lodash';
+import {formatNumber} from '../../common/functions';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
@@ -69,9 +70,7 @@ function WelcomeScreen(props) {
               style={styles.imageSummary}
               source={require('../../images/points.png')}
             />
-            <Title>
-              {_.toNumber(props.userDetails.user.points).toFixed(2)}
-            </Title>
+            <Title>{formatNumber(props.userDetails.user.points)}</Title>
             <Paragraph>Total Points</Paragraph>
           </View>
           <View style={styles.summaryView}>
@@ -80,10 +79,10 @@ function WelcomeScreen(props) {
               source={require('../../images/money-total.png')}
             />
             <Title>
-              {_.toNumber(
+              {formatNumber(
                 props.userDetails.user.points *
                   props.redeemConfigs.one_point_amount,
-              ).toFixed(2)}
+              )}
               /=
             </Title>
             <Paragraph>Cash to Redeem</Paragraph>
@@ -91,12 +90,12 @@ function WelcomeScreen(props) {
         </View>
         <View style={{margin: 4}}>
           <Paragraph>
-            1 point ={' '}
-            {_.toNumber(props.redeemConfigs.one_point_amount).toFixed(2)}/={' '}
+            1 point = {formatNumber(props.redeemConfigs.one_point_amount)}/={' '}
           </Paragraph>
           <Paragraph>
             The minimum amount you can redeem is{' '}
-            {_.toNumber(props.redeemConfigs.min_amount_redeem).toFixed(2)}/=
+            {formatNumber(props.redeemConfigs.min_amount_redeem)}
+            /=
           </Paragraph>
         </View>
       </View>

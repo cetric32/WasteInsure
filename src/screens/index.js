@@ -4,6 +4,7 @@ import RegisterScreen from './register-screen';
 import React from 'react';
 import HomeScreen from './home-screens';
 import AgentsScreen from './agents-screen';
+import RedeemScreen from './redeem-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,11 @@ export function MainNavigator(props) {
         name="Agents"
         component={AgentsScreen}
         options={{title: 'Our Collection Agents'}}
+      />
+      <Stack.Screen
+        name="Redeem"
+        component={RedeemScreen}
+        options={{title: 'Redeem'}}
       />
     </Stack.Navigator>
   );

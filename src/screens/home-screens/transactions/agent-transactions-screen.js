@@ -17,6 +17,7 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
+import {formatNumber} from '../../../common/functions';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 const height = Dimensions.get('window').height - 10;
@@ -34,7 +35,7 @@ function TransactionModal({visible, hideModal, transaction}) {
             <DataTable.Row>
               <DataTable.Cell>Quantity</DataTable.Cell>
               <DataTable.Cell numeric>
-                {`${_.toNumber(transaction.quantity).toFixed(2)} KG`}
+                {`${formatNumber(transaction.quantity)} KG`}
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>

@@ -15,8 +15,8 @@ import {
   DataTable,
 } from 'react-native-paper';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
+import {formatNumber} from '../../../common/functions';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 const height = Dimensions.get('window').height - 10;
@@ -34,25 +34,25 @@ function TransactionModal({visible, hideModal, transaction}) {
             <DataTable.Row>
               <DataTable.Cell>Quantity</DataTable.Cell>
               <DataTable.Cell numeric>
-                {`${_.toNumber(transaction.quantity).toFixed(2)} KG`}
+                {`${formatNumber(transaction.quantity)} KG`}
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Points</DataTable.Cell>
               <DataTable.Cell numeric>
-                {`${_.toNumber(transaction.points).toFixed(2)}`}
+                {`${formatNumber(transaction.points)}`}
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Points Before</DataTable.Cell>
               <DataTable.Cell numeric>
-                {`${_.toNumber(transaction.points_before).toFixed(2)}`}
+                {`${formatNumber(transaction.points_before)}`}
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Points After</DataTable.Cell>
               <DataTable.Cell numeric>
-                {`${_.toNumber(transaction.points_after).toFixed(2)}`}
+                {`${formatNumber(transaction.points_after)}`}
               </DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>

@@ -123,3 +123,7 @@ export const removeValueStorage = async key => {
     console.log(e);
   }
 };
+
+export const formatNumber = (number, currency = null) => {
+  return Intl.NumberFormat('en-US').format(number);
+};
