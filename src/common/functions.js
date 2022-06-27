@@ -3,6 +3,8 @@ import {BASE_URL} from './constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 import VersionInfo from 'react-native-version-info';
+import Intl from 'intl';
+import en from 'intl/locale-data/jsonp/en-US';
 
 export const getAuthHeader = token => {
   return {
@@ -125,5 +127,5 @@ export const removeValueStorage = async key => {
 };
 
 export const formatNumber = (number, currency = null) => {
-  return Intl.NumberFormat('en-US').format(number);
+  return Intl.NumberFormat(en).format(number);
 };
