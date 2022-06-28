@@ -34,7 +34,7 @@ function WelcomeScreen(props) {
       </View>
 
       <TouchableOpacity
-        style={{width: '100%'}}
+        style={styles.touchableOpacity}
         onPress={() => {
           props.navigation.navigate('Agents');
         }}>
@@ -46,7 +46,7 @@ function WelcomeScreen(props) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={{width: '100%'}}
+        style={styles.touchableOpacity}
         onPress={() => {
           props.navigation.navigate('Redeem');
         }}>
@@ -150,5 +150,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     padding: 10,
     marginVertical: 3,
+  },
+  touchableOpacity: {
+    width: '100%',
   },
 });

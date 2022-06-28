@@ -1,7 +1,15 @@
 import * as React from 'react';
-import {Text, View, Dimensions, StyleSheet, Alert} from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   Paragraph,
   Avatar,
@@ -118,76 +126,82 @@ function RedeemScreen(props) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         margin: 3,
-      }}>
-      <Provider>
-        <Card style={styles.card} mode="elevated">
-          <Card.Title
-            title="Information"
-            left={props => <Avatar.Icon {...props} icon="information" />}
-          />
-          <Card.Content>
-            <Paragraph>
-              Get Money from your Plastic Waste! It is simple: Give us your
-              Plastic Waste, We give you points, Redeem the points for
-              Insurance, or money for other bills.
-            </Paragraph>
-          </Card.Content>
-        </Card>
-        <Card style={styles.card} mode="elevated">
-          <Card.Title
-            title="My Earnings"
-            left={props => (
-              <Avatar.Icon {...props} icon={require('../images/salary.png')} />
-            )}
-          />
-          <Card.Content>
-            <Title>
-              {formatNumber(props.userDetails.user.points)} Points |{' '}
-              {formatNumber(
-                props.userDetails.user.points *
-                  props.redeemConfigs.one_point_amount,
-              )}
-              /=
+      }}
+      contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}>
+      <View>
+        <Paragraph>
+          You can redeem your points for mobile money,insurance or pay bills.
+        </Paragraph>
+      </View>
+      <View
+        style={[
+          styles.viewLinks,
+          {backgroundColor: '#C5C619', paddingVertical: 15},
+        ]}>
+        <View style={{flexDirection: 'row'}}>
+          <View>
+            <Image source={require('../images/points.png')} />
+          </View>
+          <View>
+            <Title style={{color: 'white'}}>
+              {formatNumber(props.userDetails.user.points)}
             </Title>
-            <Paragraph>
-              1 Point will give you{' '}
-              {formatNumber(props.redeemConfigs.one_point_amount)}/=. The
-              minimum amount to withdraw is{' '}
-              {formatNumber(props.redeemConfigs.min_amount_redeem)}
-              /=.
+            <Paragraph style={{color: 'white', fontWeight: 'bold'}}>
+              Total Points
             </Paragraph>
-            <Paragraph>
-              Note that withdrawal fees apply on the amount and will be deducted
-              from your points.
+          </View>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={() => {
+          setVisible(false);
+          setModalVisible(true);
+        }}>
+        <View style={[styles.viewLinks, {borderColor: 'green'}]}>
+          <View>
+            <Image source={require('../images/momo.png')} />
+            <Paragraph style={styles.viewLinksParagraph}>
+              Mobile Money
             </Paragraph>
-          </Card.Content>
-          <Card.Actions>
-            <Button
-              //icon={require('../../images/money.png')}
-              onPress={() => {
-                setVisible(false);
-                setModalVisible(true);
-              }}>
-              Withdraw Money
-            </Button>
-            <Button
-              icon={'school'}
-              onPress={() => {
-                Alert.alert(
-                  'Coming Soon!',
-                  'The feature for paying for your Insurance needs with points is coming soon.',
-                );
-              }}>
-              Insurance
-            </Button>
-          </Card.Actions>
-        </Card>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={() => {
+          Alert.alert(
+            'Coming Soon!',
+            'The feature for paying for your bills with points is coming soon.',
+          );
+        }}>
+        <View style={[styles.viewLinks, {borderColor: 'green'}]}>
+          <View>
+            <Image source={require('../images/bills.png')} />
+            <Paragraph style={styles.viewLinksParagraph}>Pay Bills</Paragraph>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={() => {
+          Alert.alert(
+            'Coming Soon!',
+            'The feature for paying for your Insurance needs with points is coming soon.',
+          );
+        }}>
+        <View style={[styles.viewLinks, {borderColor: 'green'}]}>
+          <View>
+            <Image source={require('../images/insurance.png')} />
+            <Paragraph style={styles.viewLinksParagraph}>Insurance</Paragraph>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <Provider>
         <WithdrawModal
           visible={modalVisible}
           hideModal={() => {
@@ -203,27 +217,39 @@ function RedeemScreen(props) {
           minRedeemValue={props.redeemConfigs.min_amount_redeem}
         />
       </Provider>
-      <Banner
-        style={styles.card}
-        visible={bannerVisible}
-        actions={[
-          {
-            label: 'Close',
-            onPress: () => setVisible(false),
-          },
-          {
-            label: 'Learn more',
-            onPress: () => {
-              Alert.alert(
-                'Withdrawal Delivery Notice',
-                'We deliver withdrawals through different partners. We try as much as possible to deliver the money within 48 hours.',
-              );
+      <Paragraph style={{padding: 7}}>
+        1 Point will give you{' '}
+        {formatNumber(props.redeemConfigs.one_point_amount)}/=. The minimum
+        amount to withdraw is{' '}
+        {formatNumber(props.redeemConfigs.min_amount_redeem)}
+        /=.
+      </Paragraph>
+      {props.userDetails.user.points * props.redeemConfigs.one_point_amount >=
+      props.redeemConfigs.min_amount_redeem ? (
+        <Banner
+          style={styles.viewLinks}
+          visible={bannerVisible}
+          actions={[
+            {
+              label: 'Close',
+              onPress: () => setVisible(false),
             },
-          },
-        ]}>
-        Withdrawals may take up to 48 hours!
-      </Banner>
-    </View>
+            {
+              label: 'Learn more',
+              onPress: () => {
+                Alert.alert(
+                  'Withdrawal Delivery Notice',
+                  'We deliver withdrawals through different partners. We try as much as possible to deliver the money within 48 hours.',
+                );
+              },
+            },
+          ]}>
+          Withdrawals may take up to 48 hours!
+        </Banner>
+      ) : (
+        <></>
+      )}
+    </ScrollView>
   );
 }
 
@@ -247,5 +273,23 @@ const styles = StyleSheet.create({
   inputs: {
     width: inputsWidth - 20,
     margin: 10,
+  },
+  viewLinks: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    width: '94%',
+    alignItems: 'center',
+    alignSelf: 'center',
+    padding: 10,
+    marginVertical: 5,
+  },
+  touchableOpacity: {
+    width: '100%',
+  },
+  viewLinksParagraph: {
+    fontWeight: 'bold',
+    color: '#707070',
+    textAlign: 'center',
   },
 });

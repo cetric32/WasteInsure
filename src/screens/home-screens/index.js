@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -71,6 +71,7 @@ function HomeScreen(props) {
             },
             tabBarActiveTintColor: tabBarActiveTintColor,
             tabBarInactiveTintColor: tabBarInactiveTintColor,
+            tabBarStyle: styles.tabBarStyle,
           })}>
           <Tab.Screen name="Transactions" component={AgentTransactionsScreen} />
           <Tab.Screen name="Collect" component={CollectWasteScreen} />
@@ -95,10 +96,7 @@ function HomeScreen(props) {
             },
             tabBarActiveTintColor: tabBarActiveTintColor,
             tabBarInactiveTintColor: tabBarInactiveTintColor,
-            tabBarStyle: {
-              backgroundColor: 'green',
-              marginTop: 4,
-            },
+            tabBarStyle: styles.tabBarStyle,
           })}>
           <Tab.Screen
             name="Welcome"
@@ -140,3 +138,11 @@ const mapStateToProps = ({user}) => {
 };
 
 export default connect(mapStateToProps, {})(HomeScreen);
+
+const styles = StyleSheet.create({
+  tabBarStyle: {
+    backgroundColor: 'green',
+    marginTop: 4,
+    padding: 5,
+  },
+});
