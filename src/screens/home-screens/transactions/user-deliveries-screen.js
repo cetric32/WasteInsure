@@ -1,7 +1,14 @@
 import _ from 'lodash';
 import * as React from 'react';
 import {useState} from 'react';
-import {Dimensions, View, StyleSheet, ScrollView} from 'react-native';
+import {
+  Dimensions,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {
   List,
   Avatar,
@@ -13,6 +20,7 @@ import {
   Provider,
   Card,
   DataTable,
+  Paragraph,
 } from 'react-native-paper';
 
 import {connect} from 'react-redux';
@@ -123,8 +131,40 @@ function UserDeliveriesScreen(props) {
           />
           {_.map(props.withdrawals.data, d => {
             return (
-              <View key={String(d.id)}>
-                <List.Item
+              <View key={String(d.id)} style={{margin: 5}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setCurrentTransaction(d);
+                    setModalVisible(true);
+                  }}
+                  style={{width: '100%'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      alignSelf: 'center',
+                    }}>
+                    <View style={{width: '9%'}}>
+                      <Image
+                        source={require('../../../images/deliveries-trans.png')}
+                      />
+                    </View>
+                    <View style={{width: '62%', paddingLeft: 8}}>
+                      <Title
+                        style={{fontSize: 13}}>{`${d.plastic_name}`}</Title>
+                      <Paragraph>Weight: {`${d.quantity} KG`}</Paragraph>
+                    </View>
+                    <View style={{width: '29%'}}>
+                      <Title></Title>
+                      <Paragraph>
+                        Date: {`${new Date(d.created_at).toLocaleDateString()}`}
+                      </Paragraph>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+
+                <Divider style={{backgroundColor: '#2AB34A'}} />
+                {/* <List.Item
                   style={styles.listItem}
                   title={`${d.plastic_name}`}
                   description={`${new Date(d.created_at).toLocaleDateString()}`}
@@ -152,7 +192,7 @@ function UserDeliveriesScreen(props) {
                     );
                   }}
                 />
-                <Divider />
+                <Divider /> */}
               </View>
             );
           })}

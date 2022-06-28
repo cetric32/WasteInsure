@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   summaryView: {
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'green',
+    borderColor: '#2AB34A',
     padding: 5,
     width: '49%',
     margin: 5,
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     width: '94%',
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: 'green',
+    backgroundColor: '#2AB34A',
     padding: 10,
     marginVertical: 3,
   },

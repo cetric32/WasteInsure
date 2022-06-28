@@ -113,7 +113,7 @@ function WithdrawModal({
           disabled={isRedeeming}
           //icon={require('../../images/money.png')}
           mode="contained"
-          style={[{backgroundColor: 'green'}, styles.inputs]}
+          style={[{backgroundColor: '#2AB34A'}, styles.inputs]}
           onPress={withdraw}>
           Withdraw
         </Button>
@@ -163,7 +163,7 @@ function RedeemScreen(props) {
           setVisible(false);
           setModalVisible(true);
         }}>
-        <View style={[styles.viewLinks, {borderColor: 'green'}]}>
+        <View style={[styles.viewLinks, {borderColor: '#2AB34A'}]}>
           <View>
             <Image source={require('../images/momo.png')} />
             <Paragraph style={styles.viewLinksParagraph}>
@@ -180,7 +180,7 @@ function RedeemScreen(props) {
             'The feature for paying for your bills with points is coming soon.',
           );
         }}>
-        <View style={[styles.viewLinks, {borderColor: 'green'}]}>
+        <View style={[styles.viewLinks, {borderColor: '#2AB34A'}]}>
           <View>
             <Image source={require('../images/bills.png')} />
             <Paragraph style={styles.viewLinksParagraph}>Pay Bills</Paragraph>
@@ -195,7 +195,7 @@ function RedeemScreen(props) {
             'The feature for paying for your Insurance needs with points is coming soon.',
           );
         }}>
-        <View style={[styles.viewLinks, {borderColor: 'green'}]}>
+        <View style={[styles.viewLinks, {borderColor: '#2AB34A'}]}>
           <View>
             <Image source={require('../images/insurance.png')} />
             <Paragraph style={styles.viewLinksParagraph}>Insurance</Paragraph>

@@ -100,7 +100,7 @@ const RegisterScreen = props => {
         mode="contained"
         loading={props.isRegistering}
         disabled={props.isRegistering}
-        style={[{backgroundColor: 'green'}, styles.inputs]}
+        style={[{backgroundColor: '#2AB34A'}, styles.inputs]}
         onPress={register}>
         Register
       </Button>

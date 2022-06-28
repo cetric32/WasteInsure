@@ -141,7 +141,7 @@ export default connect(mapStateToProps, {})(HomeScreen);
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    backgroundColor: 'green',
+    backgroundColor: '#2AB34A', //green
     marginTop: 4,
     padding: 5,
   },

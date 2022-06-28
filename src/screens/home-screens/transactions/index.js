@@ -1,7 +1,15 @@
 import _ from 'lodash';
 import * as React from 'react';
 import {useState} from 'react';
-import {Dimensions, View, StyleSheet, ScrollView, Alert} from 'react-native';
+import {
+  Dimensions,
+  View,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {
   List,
   Avatar,
@@ -13,9 +21,9 @@ import {
   Provider,
   Card,
   DataTable,
+  Paragraph,
 } from 'react-native-paper';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import {formatNumber} from '../../../common/functions';
 
@@ -128,36 +136,39 @@ function TransactionsScreen(props) {
           />
           {_.map(props.withdrawals.data, d => {
             return (
-              <View key={String(d.id)}>
-                <List.Item
-                  style={styles.listItem}
-                  title={`Redeem ${d.points} pts`}
-                  description={`${new Date(d.created_at).toLocaleDateString()}`}
+              <View key={String(d.id)} style={{margin: 5}}>
+                <TouchableOpacity
                   onPress={() => {
                     setCurrentTransaction(d);
                     setModalVisible(true);
                   }}
-                  left={props => (
-                    <Avatar.Icon
-                      {...props}
-                      style={{backgroundColor: 'lightgreen'}}
-                      icon={require('../../../images/download.png')}
-                    />
-                  )}
-                  right={props => {
-                    return (
-                      <View
-                        style={{
-                          flex: 1,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        <Title>{`${d.delivered_amount}/=`}</Title>
-                      </View>
-                    );
-                  }}
-                />
-                <Divider />
+                  style={{width: '100%'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      width: '100%',
+                      alignSelf: 'center',
+                      paddingHorizontal: 8,
+                    }}>
+                    <View style={{width: '20%'}}>
+                      <Image
+                        source={require('../../../images/transaction-money.png')}
+                      />
+                    </View>
+                    <View style={{width: '45%', paddingLeft: 5}}>
+                      <Title>{`${formatNumber(d.delivered_amount)}/=`}</Title>
+                      <Paragraph>Points: {formatNumber(d.points)}</Paragraph>
+                    </View>
+                    <View style={{width: '35%'}}>
+                      <Title></Title>
+                      <Paragraph>
+                        Date: {`${new Date(d.created_at).toLocaleDateString()}`}
+                      </Paragraph>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+
+                <Divider style={{backgroundColor: '#2AB34A'}} />
               </View>
             );
           })}

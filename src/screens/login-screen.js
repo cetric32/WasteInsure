@@ -79,7 +79,7 @@ const LoginScreen = props => {
         mode="contained"
         loading={props.isSigningIn}
         disabled={props.isSigningIn}
-        style={[{backgroundColor: 'green'}, styles.inputs]}
+        style={[{backgroundColor: '#2AB34A'}, styles.inputs]}
         onPress={login}>
         Login
       </Button>

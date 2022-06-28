@@ -104,7 +104,7 @@ const CollectWasteScreen = props => {
         mode="contained"
         loading={props.collectingWaste}
         disabled={props.collectingWaste}
-        style={[{backgroundColor: 'green'}, styles.inputs]}
+        style={[{backgroundColor: '#2AB34A'}, styles.inputs]}
         onPress={collectWaste}>
         Save
       </Button>
