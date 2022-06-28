@@ -88,8 +88,9 @@ function WithdrawModal({
         contentContainerStyle={styles.containerStyle}>
         <Title> Withdraw Mobile Money</Title>
         <Paragraph>
-          Your {points} points have a value of {pointsValue}/=. Note that
-          withdrawal fees are charged on the points.
+          Your {formatNumber(points)} points have a value of{' '}
+          {formatNumber(pointsValue)}/=. Note that withdrawal fees are charged
+          on the points.
         </Paragraph>
         <TextInput
           label="Phone Number"
@@ -225,7 +226,7 @@ function RedeemScreen(props) {
         /=.
       </Paragraph>
       {props.userDetails.user.points * props.redeemConfigs.one_point_amount >=
-      props.redeemConfigs.min_amount_redeem ? (
+        props.redeemConfigs.min_amount_redeem && bannerVisible ? (
         <Banner
           style={styles.viewLinks}
           visible={bannerVisible}
