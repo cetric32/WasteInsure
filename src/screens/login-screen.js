@@ -84,7 +84,7 @@ const LoginScreen = props => {
         Login
       </Button>
       <TextLink
-        label={'Creat Account'}
+        label={'Create Account'}
         onClick={() => {
           props.navigation.navigate('Register');
         }}

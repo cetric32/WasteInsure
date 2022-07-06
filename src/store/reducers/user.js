@@ -147,7 +147,7 @@ const UserReducer = (state = initialState, action) => {
       return {...state, isSigningOut: true};
 
     case USER_LOGOUT_SUCCESSFUL:
-      return {...state, isSigningOut: true, isSignedIn: false};
+      return {...initialState, isSigningOut: false, countries: state.countries};
 
     case USER_LOGOUT_FAILED:
       return {...state, isSigningOut: false};

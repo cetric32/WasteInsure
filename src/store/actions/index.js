@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import {
   handleAPIResponse,
   httpRequest,
+  removeValueStorage,
   storeDataStorage,
 } from '../../common/functions';
 import {
@@ -42,6 +43,9 @@ import {
   USER_LOGIN,
   USER_LOGIN_FAILED,
   USER_LOGIN_SUCCESSFUL,
+  USER_LOGOUT,
+  USER_LOGOUT_FAILED,
+  USER_LOGOUT_SUCCESSFUL,
 } from '../constants';
 
 export const registerUser = (
@@ -666,6 +670,50 @@ export const getCountries = (
         });
 
         console.log(error);
+      });
+  };
+};
+
+export const logOutUser = (
+  details,
+  onSuccess = () => {},
+  onFailure = () => {},
+) => {
+  return dispatch => {
+    dispatch({
+      type: USER_LOGOUT,
+    });
+
+    httpRequest('api/logout', 'POST')
+      .then(data => {
+        const newData = handleAPIResponse(data);
+
+        if (newData) {
+          removeValueStorage('token');
+
+          // storeDataStorage('lastPhone', phone)
+          //   .then(() => {})
+          //   .catch(() => {});
+
+          dispatch({
+            type: USER_LOGOUT_SUCCESSFUL,
+          });
+
+          onSuccess();
+        } else {
+          dispatch({
+            type: USER_LOGOUT_FAILED,
+          });
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: USER_LOGOUT_FAILED,
+        });
+
+        console.log(error);
+
+        Alert.alert(error.message);
       });
   };
 };

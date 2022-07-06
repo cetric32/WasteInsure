@@ -13,6 +13,7 @@ import CollectWasteScreen from './collect-waste-screen';
 import AgentTransactionsScreen from './transactions/agent-transactions-screen';
 import UserDeliveriesScreen from './transactions/user-deliveries-screen';
 import UpdateAppScreen from './update-screen';
+import _ from 'lodash';
 
 const Tab = createBottomTabNavigator();
 
@@ -131,9 +132,9 @@ function HomeScreen(props) {
 
 const mapStateToProps = ({user}) => {
   return {
-    isSignedIn: user.isSignedIn,
-    isAgent: user.userDetails.user.isAgent,
-    shouldUpdateApp: user.userDetails.user.shouldUpdateApp,
+    isSignedIn: _.get(user, 'isSignedIn', false),
+    isAgent: _.get(user, 'userDetails.user.isAgent', false),
+    shouldUpdateApp: _.get(user, 'userDetails.user.shouldUpdateApp', false),
   };
 };
 

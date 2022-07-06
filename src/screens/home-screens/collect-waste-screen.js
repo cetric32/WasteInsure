@@ -2,7 +2,7 @@ import {StyleSheet, ScrollView, Dimensions, View, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Button, TextInput, Paragraph} from 'react-native-paper';
 import {connect} from 'react-redux';
-import {collectUserWaste} from '../../store/actions';
+import {collectUserWaste, fetchUserPlasticTypes} from '../../store/actions';
 import {Picker} from '@react-native-picker/picker';
 import _ from 'lodash';
 
@@ -16,6 +16,9 @@ const CollectWasteScreen = props => {
 
   useEffect(() => {
     setCountry(_.find(props.countries, c => c.id == props.countryId));
+    if (_.isEmpty(props.plasticTypes)) {
+      props.fetchUserPlasticTypes();
+    }
   }, []);
 
   const collectWaste = () => {
@@ -121,7 +124,10 @@ const mapStateToProps = ({user}) => {
   };
 };
 
-export default connect(mapStateToProps, {collectUserWaste})(CollectWasteScreen);
+export default connect(mapStateToProps, {
+  collectUserWaste,
+  fetchUserPlasticTypes,
+})(CollectWasteScreen);
 
 const styles = StyleSheet.create({
   inputs: {
