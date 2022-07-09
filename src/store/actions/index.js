@@ -58,7 +58,7 @@ export const registerUser = (
       type: REGISTER,
     });
 
-    const {name, phone, email, password, country_id} = details;
+    const {name, phone, email, password, country_id, country} = details;
 
     if (!name || name.trim().indexOf(' ') == -1) {
       Alert.alert('Name Required', 'Please provide your full name');
@@ -113,6 +113,10 @@ export const registerUser = (
 
         if (newData) {
           storeDataStorage('lastPhone', phone)
+            .then(() => {})
+            .catch(() => {});
+
+          storeDataStorage('country', country)
             .then(() => {})
             .catch(() => {});
 
@@ -566,9 +570,12 @@ export const loginUser = (
       type: USER_LOGIN,
     });
 
-    const {phone, password} = details;
+    console.log('====================================');
+    console.log('details', details);
+    console.log('====================================');
+    const {phone, password, country, phoneCode} = details;
 
-    if (!phone) {
+    if (!phone || !country) {
       Alert.alert('Phone Required', 'Please provide your phone number');
 
       dispatch({
@@ -589,7 +596,7 @@ export const loginUser = (
     }
 
     httpRequest('api/login', 'POST', {
-      phone,
+      phone: `${phoneCode}${phone}`,
       password,
     })
       .then(data => {
@@ -610,6 +617,10 @@ export const loginUser = (
             .catch(() => {});
 
           storeDataStorage('lastPhone', phone)
+            .then(() => {})
+            .catch(() => {});
+
+          storeDataStorage('country', country)
             .then(() => {})
             .catch(() => {});
 
@@ -690,10 +701,6 @@ export const logOutUser = (
 
         if (newData) {
           removeValueStorage('token');
-
-          // storeDataStorage('lastPhone', phone)
-          //   .then(() => {})
-          //   .catch(() => {});
 
           dispatch({
             type: USER_LOGOUT_SUCCESSFUL,

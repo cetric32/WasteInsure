@@ -1,11 +1,12 @@
-import {StyleSheet, ScrollView, Dimensions, View} from 'react-native';
+import {StyleSheet, ScrollView, Dimensions, View, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {Button, TextInput, Text, Badge, Avatar} from 'react-native-paper';
-import {TextLink} from '../common/components';
+import {PhoneNumberInput, TextLink} from '../common/components';
 import {connect} from 'react-redux';
 import {registerUser} from '../store/actions';
 import {Picker} from '@react-native-picker/picker';
 import _ from 'lodash';
+import {DEFAULT_COUNTRY} from '../common/constants';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
@@ -15,16 +16,27 @@ const RegisterScreen = props => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [country, setCountry] = useState({});
-  const [phoneCode, setPhoneCode] = useState('');
+  const [phoneIsValid, setPhoneIsValid] = useState(false);
 
   const register = () => {
+    const countryFound = _.find(props.countries, c => {
+      const phoneCode = _.isEmpty(country.callingCode)
+        ? DEFAULT_COUNTRY.phoneCode
+        : `+${country.callingCode[0]}`;
+
+      return c.phone_code === phoneCode;
+    });
+
+    console.log('countryFound', countryFound);
+
     props.registerUser(
       {
-        phone: `${phoneCode || ''}${phone}`,
+        phone: `+${country.callingCode[0]}${phone}`,
         password,
         name,
         email,
-        country_id: country.id,
+        country_id: countryFound.id,
+        country,
       },
       () => {
         props.navigation.navigate('Login');
@@ -52,7 +64,7 @@ const RegisterScreen = props => {
         style={styles.inputs}
         right={<TextInput.Icon name="account" />}
       />
-      <View style={{width: inputsWidth, borderColor: 'grey', borderWidth: 0.9}}>
+      {/* <View style={{width: inputsWidth, borderColor: 'grey', borderWidth: 0.9}}>
         <Picker
           selectedValue={country || ''}
           style={styles.inputs}
@@ -65,9 +77,19 @@ const RegisterScreen = props => {
             return <Picker.Item label={c.name} value={c} key={c.id} />;
           })}
         </Picker>
-      </View>
+      </View> */}
 
-      <TextInput
+      <PhoneNumberInput
+        phone={phone}
+        setPhone={setPhone}
+        phoneIsValid={phoneIsValid}
+        setPhoneIsValid={setPhoneIsValid}
+        country={country}
+        setCountry={setCountry}
+        width={inputsWidth}
+      />
+
+      {/* <TextInput
         label="Phone Number"
         value={phone}
         onChangeText={text => setPhone(text)}
@@ -76,7 +98,7 @@ const RegisterScreen = props => {
         right={<TextInput.Icon name="phone" />}
         keyboardType="phone-pad"
         left={<TextInput.Affix text={phoneCode} />}
-      />
+      /> */}
       <TextInput
         label="Email (optional)"
         value={email}

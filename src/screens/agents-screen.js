@@ -17,10 +17,19 @@ import {
 } from 'react-native-paper';
 import {SUPPORT_MAIL, SUPPORT_PHONE_NUMBER} from '../common/constants';
 import {connect} from 'react-redux';
+import {fetchUserAgents} from '../store/actions';
+import {useEffect} from 'react';
+import _ from 'lodash';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
 const AgentsScreen = props => {
+  useEffect(() => {
+    if (_.isEmpty(props.agents)) {
+      props.fetchUserAgents();
+    }
+  });
+
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Card style={{width: inputsWidth}} mode="elevated">
@@ -98,6 +107,6 @@ const mapStateToProps = ({user}) => {
   };
 };
 
-export default connect(mapStateToProps, {})(AgentsScreen);
+export default connect(mapStateToProps, {fetchUserAgents})(AgentsScreen);
 
 const styles = StyleSheet.create({});

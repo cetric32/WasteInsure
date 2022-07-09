@@ -29,6 +29,7 @@ import _ from 'lodash';
 import {useEffect} from 'react';
 import {formatNumber, getDataStorage} from '../common/functions';
 import {redeemWithdraw} from '../store/actions';
+import {PhoneNumberInput} from '../common/components';
 
 const inputsWidth = Dimensions.get('window').width - 25;
 
@@ -43,8 +44,18 @@ function WithdrawModal({
 }) {
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
+  const [country, setCountry] = useState({});
 
   useEffect(() => {
+    getDataStorage('country')
+      .then(data => {
+        if (data) {
+          console.log('country', data);
+          setCountry(data);
+        }
+      })
+      .catch(() => {});
+
     getDataStorage('lastPhone')
       .then(data => {
         if (data) {
@@ -92,13 +103,20 @@ function WithdrawModal({
           {formatNumber(pointsValue)}/=. Note that withdrawal fees are charged
           on the points.
         </Paragraph>
-        <TextInput
+        {/* <TextInput
           label="Phone Number"
           value={phone}
           onChangeText={text => setPhone(text)}
           mode="outlined"
           style={styles.inputs}
           right={<TextInput.Icon name="phone" />}
+        /> */}
+        <PhoneNumberInput
+          phone={phone}
+          setPhone={setPhone}
+          country={country}
+          setCountry={setCountry}
+          width={inputsWidth - 14}
         />
         <TextInput
           label="Amount"
