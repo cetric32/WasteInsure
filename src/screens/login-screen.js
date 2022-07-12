@@ -38,7 +38,6 @@ const LoginScreen = props => {
     getDataStorage('lastPhone')
       .then(data => {
         if (data) {
-          console.log('lastPhone', data);
           setPhone(data);
         } else {
           setPhone('');

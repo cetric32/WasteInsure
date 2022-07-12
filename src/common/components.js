@@ -4,7 +4,7 @@ import React, {useRef} from 'react';
 import _ from 'lodash';
 import {DEFAULT_COUNTRY} from './constants';
 
-export const TextLink = ({onClick = () => {}, label}) => {
+export const TextLink = ({onClick = () => {}, label, styles}) => {
   return (
     <Text style={{color: 'blue'}} onPress={onClick}>
       {label}
@@ -34,7 +34,6 @@ export const PhoneNumberInput = ({
         defaultCode={_.get(country, 'cca2', DEFAULT_COUNTRY.countryCode)}
         layout="first"
         onChangeCountry={country => {
-          console.log('country', country);
           if (setCountry) {
             setCountry(country);
           }
