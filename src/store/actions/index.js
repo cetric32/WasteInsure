@@ -231,7 +231,9 @@ export const redeemWithdraw = (
       type: REDEEM_WITHDRAW,
     });
 
-    const {phone, amount} = details;
+    console.log('details', details);
+
+    const {phone, amount, type, phoneCode} = details;
 
     if (!amount) {
       Alert.alert(
@@ -246,7 +248,7 @@ export const redeemWithdraw = (
       return;
     }
 
-    if (!phone) {
+    if (!phone || !phoneCode) {
       Alert.alert(
         'Phone Number Required',
         'Please provide the phone number to sent money to',
@@ -259,7 +261,12 @@ export const redeemWithdraw = (
       return;
     }
 
-    httpRequest('api/withdraw', 'POST', {phone, amount})
+    httpRequest('api/withdraw', 'POST', {
+      phone: `${phoneCode}${phone}`,
+      amount,
+      type,
+      phoneCode,
+    })
       .then(data => {
         const newData = handleAPIResponse(data);
 

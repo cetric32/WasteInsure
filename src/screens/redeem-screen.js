@@ -41,6 +41,7 @@ function WithdrawModal({
   isRedeeming,
   redeemWithdraw,
   minRedeemValue,
+  type,
 }) {
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
@@ -77,16 +78,20 @@ function WithdrawModal({
       return;
     }
 
-    if (amountWithdraw < minRedeemValue) {
-      Alert.alert(
-        'Insufficient Funds',
-        `The minimum you can try to withdraw is ${minRedeemValue}/=`,
-      );
+    if (!_.includes(['airtime'], type)) {
+      if (amountWithdraw < minRedeemValue) {
+        Alert.alert(
+          'Insufficient Funds',
+          `The minimum you can try to withdraw is ${minRedeemValue}/=`,
+        );
 
-      return;
+        return;
+      }
     }
 
-    redeemWithdraw({amount, phone}, () => {
+    const phoneCode = `+${country.callingCode[0]}`;
+
+    redeemWithdraw({amount, phone, type, phoneCode}, () => {
       hideModal();
     });
   };
@@ -97,11 +102,17 @@ function WithdrawModal({
         visible={visible}
         onDismiss={hideModal}
         contentContainerStyle={styles.containerStyle}>
-        <Title> Withdraw Mobile Money</Title>
+        <Title>
+          {_.includes(['airtime'], type)
+            ? 'Buy Airtime'
+            : 'Withdraw Mobile Money'}{' '}
+        </Title>
         <Paragraph>
           Your {formatNumber(points)} points have a value of{' '}
-          {formatNumber(pointsValue)}/=. Note that withdrawal fees are charged
-          on the points.
+          {formatNumber(pointsValue)}/=.
+          {!_.includes(['airtime'], type)
+            ? 'Note that withdrawal fees are charged on the points.'
+            : ''}{' '}
         </Paragraph>
         {/* <TextInput
           label="Phone Number"
@@ -133,7 +144,7 @@ function WithdrawModal({
           mode="contained"
           style={[{backgroundColor: '#2AB34A'}, styles.inputs]}
           onPress={withdraw}>
-          Withdraw
+          {_.includes(['airtime'], type) ? 'Buy Airtime' : 'Withdraw'}
         </Button>
       </Modal>
     </Portal>
@@ -143,6 +154,7 @@ function WithdrawModal({
 function RedeemScreen(props) {
   const [bannerVisible, setVisible] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [type, setType] = useState('momo');
 
   return (
     <ScrollView
@@ -178,6 +190,7 @@ function RedeemScreen(props) {
       <TouchableOpacity
         style={styles.touchableOpacity}
         onPress={() => {
+          setType('momo');
           setVisible(false);
           setModalVisible(true);
         }}>
@@ -187,6 +200,20 @@ function RedeemScreen(props) {
             <Paragraph style={styles.viewLinksParagraph}>
               Mobile Money
             </Paragraph>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={() => {
+          setType('airtime');
+          setVisible(false);
+          setModalVisible(true);
+        }}>
+        <View style={[styles.viewLinks, {borderColor: '#2AB34A'}]}>
+          <View>
+            <Image source={require('../images/momo.png')} />
+            <Paragraph style={styles.viewLinksParagraph}>Buy Airtime</Paragraph>
           </View>
         </View>
       </TouchableOpacity>
@@ -227,6 +254,7 @@ function RedeemScreen(props) {
             setVisible(true);
             setModalVisible(false);
           }}
+          type={type}
           points={props.userDetails.user.points}
           pointsValue={
             props.userDetails.user.points * props.redeemConfigs.one_point_amount
